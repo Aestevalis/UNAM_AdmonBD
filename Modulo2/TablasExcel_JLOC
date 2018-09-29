@@ -1,0 +1,61 @@
+CREATE TABLE Branch(
+branchNo VARCHAR2(4) constraint bh_pk PRIMARY KEY,
+street VARCHAR2(20),
+city VARCHAR2(20),
+postcode VARCHAR2(10)
+);
+
+CREATE TABLE Staff(
+staffNo VARCHAR2(6) constraint sf_pk PRIMARY KEY,
+fName VARCHAR2(30),
+IName VARCHAR2(30),
+position VARCHAR2(30),
+sex VARCHAR2(1),
+DOB Date,
+Salary Number(7,2),
+branchNo VARCHAR2(4) constraint sf_bh_fk REFERENCES Branch(branchNo)
+);
+
+CREATE TABLE PrivateOwner(
+ownerNo VARCHAR2(5) constraint pr_pk PRIMARY KEY,
+fName VARCHAR2(20),
+IName VARCHAR2(20),
+address VARCHAR2(60),
+telNo VARCHAR2(15)
+);
+
+CREATE TABLE PropertyForRent(
+propertyNo VARCHAR2(5) constraint pt_pk PRIMARY KEY,
+street VARCHAR2(20),
+city VARCHAR2(20),
+postcode VARCHAR2(10),
+type VARCHAR2(10),
+rooms NUMBER(2,0),
+Rent NUMBER(8,2),
+OwnerNo VARCHAR2(5) constraint pt_pr_fk REFERENCES PrivateOwner(OwnerNo),
+staffNo VARCHAR2(6) constraint pt_sf_fk REFERENCES Staff(StaffNo),
+branchNo VARCHAR2(4) constraint pt_bn_fk REFERENCES branch(branchNo)
+);
+
+CREATE TABLE Client(
+clientNo VARCHAR2(5) constraint ct_pk PRIMARY KEY,
+fName VARCHAR2(20),
+IName VARCHAR2(20),
+telNo VARCHAR2(15),
+prefType VARCHAR2(10),
+maxRent Number(4,2)
+);
+
+CREATE TABLE Viewing(
+clientNo VARCHAR2(5) constraint vg_ct_fk REFERENCES Client(clientNo),
+PropertyNo VARCHAR2(5) constraint vg_pt_fk REFERENCES PropertyForRent(propertyNo),
+viewDate DATE,
+comment1 VARCHAR2(100)
+);
+
+CREATE TABLE Registration(
+clientNo VARCHAR2(5) constraint rn_ct_fk REFERENCES Client(clientNo),
+branchNo VARCHAR2(4) constraint rn_bo_fk REFERENCES Branch(branchNo),
+staffNo VARCHAR2(6) constraint rn_sf_fk REFERENCES Staff(StaffNo),
+dateJoined DATE
+);
